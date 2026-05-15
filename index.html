@@ -2036,8 +2036,18 @@ async function goStep(n){
     l.classList.toggle('done', i<n);
   }
   state.currentStep = n;
-  if(n===3) await buildSummary();
-  document.getElementById('reservas').scrollIntoView({behavior:'smooth',block:'start'});
+  // Scroll inmediato al formulario antes de cargar el resumen
+  document.getElementById('reservas').scrollIntoView({behavior:'smooth', block:'start'});
+
+  if(n===3){
+    // Mostrar loading en el badge mientras carga el número
+    document.getElementById('reservationNumber').textContent = 'Generando...';
+    await buildSummary();
+    // Scroll al form-box después de cargar el resumen
+    setTimeout(()=>{
+      document.querySelector('.form-box').scrollIntoView({behavior:'smooth', block:'start'});
+    }, 300);
+  }
 }
 
 function validateStep(n){
